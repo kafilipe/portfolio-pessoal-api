@@ -1,0 +1,29 @@
+{
+  "name": "portfolio-pessoal-api",
+  "version": "1.0.0",
+  "description": "Projeto de Portifólio Pessoal da Mentoria 2.0 em Teste de Software",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kafilipe/portfolio-pessoal-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kafilipe/portfolio-pessoal-api/issues"
+  },
+  "homepage": "https://github.com/kafilipe/portfolio-pessoal-api#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "supertest": "^7.2.2",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

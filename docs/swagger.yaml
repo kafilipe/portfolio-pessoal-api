@@ -1,0 +1,265 @@
+openapi: 3.0.0
+info:
+  title: Aurora Tours API
+  version: 1.0.0
+  description: API REST simplificada para a agência de viagens Aurora Tours.
+servers:
+  - url: http://localhost:3000
+paths:
+  /login:
+    post:
+      summary: Autenticar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                senha:
+                  type: string
+      responses:
+        '200':
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  usuario:
+                    $ref: '#/components/schemas/Usuario'
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /passeios:
+    get:
+      summary: Listar passeios
+      responses:
+        '200':
+          description: Lista de passeios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Passeio'
+    post:
+      summary: Criar passeio
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasseioInput'
+      responses:
+        '201':
+          description: Passeio criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Passeio'
+        '403':
+          description: Acesso não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /passeios/{id}:
+    get:
+      summary: Buscar passeio por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Passeio encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Passeio'
+        '404':
+          description: Passeio não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /reservas:
+    post:
+      summary: Criar reserva
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservaInput'
+      responses:
+        '201':
+          description: Reserva criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+        '403':
+          description: Apenas clientes podem fazer reservas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Passeio não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: Listar reservas do cliente autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista das reservas do cliente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+  /reservas/{id}:
+    patch:
+      summary: Cancelar reserva
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Reserva cancelada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserva'
+        '403':
+          description: Acesso não autorizado ou reserva de outro usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Reserva não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /reservas/admin:
+    get:
+      summary: Listar todas as reservas do sistema
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista com todas as reservas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserva'
+        '403':
+          description: Acesso não autorizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        tipo:
+          type: string
+    Passeio:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        destino:
+          type: string
+        preco:
+          type: number
+        capacidade_maxima:
+          type: integer
+    PasseioInput:
+      type: object
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+        destino:
+          type: string
+        preco:
+          type: number
+        capacidade_maxima:
+          type: integer
+    Reserva:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_usuario:
+          type: integer
+        id_passeio:
+          type: integer
+        data:
+          type: string
+        quantidade_pessoas:
+          type: integer
+        status:
+          type: string
+    ReservaInput:
+      type: object
+      properties:
+        id_passeio:
+          type: integer
+        data:
+          type: string
+        quantidade_pessoas:
+          type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
