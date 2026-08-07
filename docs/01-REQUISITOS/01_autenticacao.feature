@@ -10,7 +10,7 @@ Funcionalidade: Autenticar usuário
       Quando envio uma requisição POST para "/login"
       E preencho a informação email com email válido
       E preencho a informacao senha com senha válida
-      Então o status code deve ser 200 OK
+      Então o status code deve ser 200
       E a resposta deve conter o token gerado 
 
     Cenário: Usuário efetua login com email inválido
@@ -18,7 +18,7 @@ Funcionalidade: Autenticar usuário
       Quando envio uma requisição POST para "/login"
       E preencho a informação email com email inválido
       E preencho a informacao senha com senha válida
-      Então o status code deve ser 401 Unauthorized
+      Então o status code deve ser 401
       E a resposta deve conter a mensagem "Credenciais inválidas"
 
     Cenário: Usuário efetua login com senha inválida
@@ -26,7 +26,7 @@ Funcionalidade: Autenticar usuário
       Quando envio uma requisição POST para "/login"
       E preencho a informação email com email válido
       E preencho a informacao senha com senha inválida
-      Então o status code deve ser 401 Unauthorized
+      Então o status code deve ser 401
       E a resposta deve conter a mensagem "Credenciais inválidas"
 
     Cenário: Usuário efetua login com campos vazios
@@ -34,5 +34,5 @@ Funcionalidade: Autenticar usuário
       Quando envio uma requisição POST para "/login"
       E preencho a informação email com ""
       E preencho a informacao senha com ""
-      Então o status code deve ser 401 Unauthorized
+      Então o status code deve ser 401
       E a resposta deve conter a mensagem "Credenciais inválidas"
